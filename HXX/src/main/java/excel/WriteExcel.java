@@ -21,7 +21,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class WriteExcel {
     private static final String EXCEL_XLS = "xls";
     private static final String EXCEL_XLSX = "xlsx";
-    private FileCreate filecreate = new FileCreate();
+//    private FileCreate filecreate = new FileCreate();
 
     //    public static void main(String[] args) {
 //
@@ -143,8 +143,8 @@ public class WriteExcel {
             Workbook workBook = getWorkbok(finalXlsxFile);
             // sheet 对应一个工作页
             Sheet sheet = workBook.getSheetAt(0);
-            String sheetname = sheet.getSheetName();
-            System.out.println(sheetname);
+//            String sheetname = sheet.getSheetName();
+//            System.out.println(sheetname);
             /**
              * 删除原有数据，除了属性列
              */
@@ -210,7 +210,7 @@ public class WriteExcel {
                 e.printStackTrace();
             }
         }
-        System.out.println("数据导出成功");
+//        System.out.println("数据导出成功");
     }
 
     public void writeExcelSheet2(String type, List<String> dataList, String finalXlsxPath) {
@@ -225,12 +225,12 @@ public class WriteExcel {
             Sheet sheet = null;
             if (type.equals("竞猜")) {
                 sheet = workBook.getSheetAt(1);
-                String sheetName1 = sheet.getSheetName();
-                System.out.println(sheetName1);
+//                String sheetName1 = sheet.getSheetName();
+//                System.out.println(sheetName1);
             } else {
                 sheet = workBook.getSheetAt(3);
-                String sheetName1 = sheet.getSheetName();
-                System.out.println(sheetName1);
+//                String sheetName1 = sheet.getSheetName();
+//                System.out.println(sheetName1);
             }
 
             /**
@@ -271,7 +271,7 @@ public class WriteExcel {
                 e.printStackTrace();
             }
         }
-        System.out.println("数据导出成功");
+//        System.out.println("数据导出成功");
     }
     public  void writeExcelSheet3(Listmap dataList, String finalXlsxPath) {
         OutputStream out = null;
@@ -283,8 +283,8 @@ public class WriteExcel {
             Workbook workBook = getWorkbok(finalXlsxFile);
             // sheet 对应一个工作页
             Sheet sheet = workBook.getSheetAt(2);
-            String sheetname = sheet.getSheetName();
-            System.out.println(sheetname);
+//            String sheetname = sheet.getSheetName();
+//            System.out.println(sheetname);
             /**
              * 删除原有数据，除了属性列
              */
@@ -343,7 +343,7 @@ public class WriteExcel {
                 e.printStackTrace();
             }
         }
-        System.out.println("数据导出成功");
+//        System.out.println("数据导出成功");
     }
 
     public  void writeExcelSheet4(String date,List<Integer> sumCount, String finalXlsxPath) {
@@ -353,8 +353,8 @@ public class WriteExcel {
             Workbook workBook = getWorkbok(finalXlsxFile);
             // sheet 对应一个工作页
             Sheet sheet = workBook.getSheetAt(4);
-            String sheetname = sheet.getSheetName();
-            System.out.println(sheetname);
+//            String sheetname = sheet.getSheetName();
+//            System.out.println(sheetname);
             /**
              * 删除原有数据，除了属性列
              */
@@ -396,7 +396,7 @@ public class WriteExcel {
                 e.printStackTrace();
             }
         }
-        System.out.println("数据导出成功");
+//        System.out.println("数据导出成功");
     }
 
     /**

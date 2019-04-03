@@ -1,9 +1,9 @@
+import Mail.MainTestMail;
 import db.DBUtil;
 import db.Listmap;
 import db.VeDate;
 import excel.WriteExcel;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 public class TestXSSF {
@@ -17,7 +17,7 @@ public class TestXSSF {
             DBUtil db = new DBUtil();
             db.DBUtilInit(dbName[dateBase]);
             WriteExcel writeExcel = new WriteExcel();
-            String filePath = "D:\\" +dbName[dateBase].toUpperCase()  +"数据需求模板"+ VeDate.getNowDate() + ".xlsx";
+            String filePath = "D:\\" +dbName[dateBase].toUpperCase()  +"数据需求模板.xlsx";
             System.out.println(filePath);
             fileSend[dateBase]=filePath;
             writeExcel.initExcel(dbName[dateBase],filePath);
@@ -27,6 +27,7 @@ public class TestXSSF {
             ResultSet resultSet = db.sqlQueryPre(date1);
             sqlMap = db.getResultMapList(resultSet);
             writeExcel.writeExcel(sqlMap,filePath);
+            System.out.println(dbName[dateBase]+"数据库下天气宝每日盈亏统计完成");
             List sumCount;
             sumCount =db.sqlSumPersons();
             writeExcel.writeExcelSheet4(VeDate.getNowDate(),sumCount,filePath);
@@ -36,26 +37,19 @@ public class TestXSSF {
                     List dd1;
                     dd1 = db.sqlPersonOfPerDay(typeArray[i], date1);
                     writeExcel.writeExcelSheet2(typeArray[i], dd1, filePath);
-                    System.out.println(dbName[dateBase]+"数据库下天气宝的"+typeArray[i] + "统计完成！！！！");
+                    System.out.println(dbName[dateBase]+"数据库下"+typeArray[i] + "人数和人次统计完成！！！！");
                 }
                 Listmap sqlMap2 ;
                 ResultSet resultSet2 = db.sqlQueryCityPre(date1);
-                try{
-                    if (resultSet2.next()){
-                        sqlMap2 = db.getResultMapList(resultSet2);
-                        writeExcel.writeExcelSheet3(sqlMap2,filePath);
-                    }else {
-                        System.out.println(date1+"城市纷争没有人参加活动");
-                    }
-                } catch (SQLException e){
-                    e.printStackTrace();
-                }
+                sqlMap2 = db.getResultMapList(resultSet2);
+                writeExcel.writeExcelSheet3(sqlMap2,filePath);
+                System.out.println(dbName[dateBase]+"数据库下城市纷争盈亏统计完成！");
             }
             else {
                 List dd1;
                 dd1 = db.sqlPersonOfPerDay(typeArray[1], date1);
                 writeExcel.writeExcelSheet2(typeArray[1], dd1, filePath);
-                System.out.println(dbName[dateBase]+"数据库下城市纷争的"+typeArray[1] + "统计完成！！！！");
+                System.out.println(dbName[dateBase]+"数据库下城市纷争的每日参与人数和人次统计完成");
             }
             db.close();
         }
