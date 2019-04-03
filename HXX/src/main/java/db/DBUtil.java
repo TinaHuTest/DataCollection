@@ -90,6 +90,12 @@ public class DBUtil {
         return  list;
     }
 
+    /***
+     * 获取天气宝和城市纷争参与人数和人次
+     * @param type
+     * @param datetime
+     * @return
+     */
     public List<String> sqlPersonOfPerDay(String type, String datetime) {
         ResultSet rs = null;
         ResultSet rs1 = null;
@@ -138,14 +144,24 @@ public class DBUtil {
 
     public ResultSet sqlQueryCityPre(String datetime) {
         ResultSet rs1 = null;
-        String sql = "SELECT DISTINCT g.start_time  time, g.answer  answer, g.total_amount / 100 total_amount,IFNULL(sum(d.mount * d.rate),0) total_pay, (g.total_amount / 100 - IFNULL(sum(d.mount * d.rate),0)) cost\n" +
+        //该Sql语句是有中奖的情况下得到的盈亏统计
+        String sqlWin = "SELECT DISTINCT g.start_time  time, g.answer  answer, g.total_amount / 100 total_amount,IFNULL(sum(d.mount * d.rate),0) total_pay, (g.total_amount / 100 - IFNULL(sum(d.mount * d.rate),0)) cost\n" +
                 "FROM mg_activity_guess g LEFT JOIN mg_activity_guess_detail d ON d.guess_id = g.id AND d.`status` = '恭喜中奖' \n" +
+                "WHERE g.type = '预测' AND g.start_time = ? GROUP BY g.id";
+        //该Sql语句是没有中奖的情况下得到的盈亏统计
+        String sqlNoWin = "SELECT DISTINCT g.start_time  time, g.answer  answer, g.total_amount / 100 total_amount,IFNULL(sum(d.mount * d.rate),0) total_pay, (g.total_amount / 100 - IFNULL(sum(d.mount * d.rate),0)) cost\n" +
+                "FROM mg_activity_guess g LEFT JOIN mg_activity_guess_detail d ON d.guess_id = g.id \n" +
                 "WHERE g.type = '预测' AND g.start_time = ? GROUP BY g.id";
         PreparedStatement pstmt3;
         try {
-            pstmt3 = conn.prepareStatement(sql);
+            pstmt3 = conn.prepareStatement(sqlWin);
             pstmt3.setString(1, datetime);
             rs1 = pstmt3.executeQuery();
+            if(rs1==null){
+                pstmt3 = conn.prepareStatement(sqlNoWin);
+                pstmt3.setString(1, datetime);
+                rs1 = pstmt3.executeQuery();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -1,3 +1,5 @@
+package Mail;
+
 import Mail.MailOperation;
 import db.VeDate;
 
@@ -16,7 +18,6 @@ public class MainTestMail {
         sb.append("<!DOCTYPE>" + "<div bgcolor='#f1fcfa'   style='border:1px solid #d9f4ee; font-size:14px; line-height:22px; color:#005aa0;padding-left:1px;padding-top:5px;   padding-bottom:5px;'><span style='font-weight:bold;'>温馨提示：</span>"
                 + "<div style='width:950px;font-family:arial;'><h3 style='color:green'>" + "今天的数据已经整理好，请查阅附件内容！" + "</h3><br/>本邮件由代码自动执行，请勿回复<br/>Thanks and best wishes！<br/>胡艳娜</div>"
                 + "</div>");
-//        String[] fileName = {"D:\\METEO_SLT数据需求模板20190310.xlsx", "D:\\METEO_BKB数据需求模板20190310.xlsx"};
         try {
             String res = operation.sendMail(user, password, host, from, to,
                     subject, sb.toString(), fileSend);
