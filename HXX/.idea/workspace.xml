@@ -30,11 +30,19 @@
           </provider>
         </entry>
       </file>
+<<<<<<< HEAD
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/db/VeDate.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="83">
               <caret line="18" column="67" selection-start-line="18" selection-start-column="67" selection-end-line="18" selection-end-column="67" />
+=======
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/db/VeDate.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="83">
+              <caret line="18" column="66" selection-start-line="18" selection-start-column="64" selection-end-line="18" selection-end-column="66" />
+>>>>>>> branch1
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -42,7 +50,11 @@
           </provider>
         </entry>
       </file>
+<<<<<<< HEAD
       <file pinned="false" current-in-tab="true">
+=======
+      <file pinned="false" current-in-tab="false">
+>>>>>>> branch1
         <entry file="file://$PROJECT_DIR$/src/test/java/TestXSSF.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="140">
@@ -143,7 +155,11 @@
       <select />
     </treeState>
   </component>
+<<<<<<< HEAD
   <component name="ProjectFrameBounds" extendedState="7">
+=======
+  <component name="ProjectFrameBounds" extendedState="6">
+>>>>>>> branch1
     <option name="x" value="12" />
     <option name="y" value="47" />
     <option name="width" value="1386" />
@@ -162,6 +178,7 @@
               <item name="HXX" type="b2602c69:ProjectViewProjectNode" />
               <item name="HXX" type="462c0819:PsiDirectoryNode" />
             </path>
+<<<<<<< HEAD
             <path>
               <item name="HXX" type="b2602c69:ProjectViewProjectNode" />
               <item name="HXX" type="462c0819:PsiDirectoryNode" />
@@ -202,6 +219,8 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="test" type="462c0819:PsiDirectoryNode" />
             </path>
+=======
+>>>>>>> branch1
           </expand>
           <select />
         </subPane>
@@ -212,7 +231,11 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
+<<<<<<< HEAD
     <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1554080979391" />
+=======
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1554087463674" />
+>>>>>>> branch1
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -317,12 +340,20 @@
       <workItem from="1553667653272" duration="21000" />
       <workItem from="1553776288388" duration="28000" />
       <workItem from="1553848645523" duration="37000" />
+<<<<<<< HEAD
       <workItem from="1553859071466" duration="6041000" />
+=======
+      <workItem from="1553859071466" duration="6920000" />
+>>>>>>> branch1
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
+<<<<<<< HEAD
     <option name="totallyTimeSpent" value="101744000" />
+=======
+    <option name="totallyTimeSpent" value="102623000" />
+>>>>>>> branch1
   </component>
   <component name="TodoView" selected-index="1">
     <todo-panel id="selected-file">
@@ -335,9 +366,14 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1320" height="784" extended-state="6" />
+<<<<<<< HEAD
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4919355" visible="true" weight="0.12820514" />
+=======
+    <layout>
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4919355" visible="true" weight="0.20673077" />
+>>>>>>> branch1
       <window_info id="Structure" order="1" sideWeight="0.5063291" side_tool="true" weight="0.24045801" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -348,7 +384,11 @@
       <window_info anchor="bottom" id="Spring" order="1" weight="0.3293718" />
       <window_info anchor="bottom" id="Message" order="2" />
       <window_info anchor="bottom" id="Find" order="3" weight="0.3378608" />
+<<<<<<< HEAD
       <window_info active="true" anchor="bottom" id="Run" order="4" visible="true" weight="0.30333334" />
+=======
+      <window_info anchor="bottom" id="Run" order="4" weight="0.30333334" />
+>>>>>>> branch1
       <window_info anchor="bottom" id="Debug" order="5" weight="0.37" />
       <window_info anchor="bottom" id="Cvs" order="6" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="7" weight="0.4" />
@@ -646,30 +686,51 @@
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/src/main/java/db/VeDate.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="83">
           <caret line="18" column="67" selection-start-line="18" selection-start-column="67" selection-end-line="18" selection-end-column="67" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+=======
     <entry file="file://$PROJECT_DIR$/src/test/java/MainTestMail.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="270">
           <caret line="10" column="31" selection-start-line="10" selection-start-column="21" selection-end-line="10" selection-end-column="31" />
+>>>>>>> branch1
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
+    <entry file="file://$PROJECT_DIR$/src/test/java/MainTestMail.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="10" column="31" selection-start-line="10" selection-start-column="21" selection-end-line="10" selection-end-column="31" />
+=======
     <entry file="file://$PROJECT_DIR$/src/test/java/TestXSSF.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="140">
           <caret line="31" column="38" selection-start-line="31" selection-start-column="38" selection-end-line="31" selection-end-column="38" />
+>>>>>>> branch1
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+<<<<<<< HEAD
+    <entry file="file://$PROJECT_DIR$/src/test/java/TestXSSF.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="140">
+          <caret line="31" column="38" selection-start-line="31" selection-start-column="38" selection-end-line="31" selection-end-column="38" />
+=======
+    <entry file="file://$PROJECT_DIR$/src/main/java/db/VeDate.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="83">
+          <caret line="18" column="66" selection-start-line="18" selection-start-column="64" selection-end-line="18" selection-end-column="66" />
+>>>>>>> branch1
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
