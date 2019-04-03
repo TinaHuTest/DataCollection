@@ -10,8 +10,8 @@ public class MainTestMail {
         String password = "SHUNLI@8899";    //"你的邮箱授权码";
         String host = "smtp.163.com";
         String from = "huyanna16935@163.com";   //"你的邮箱地址
-//        String to = "machengkai@mlogcn.com";// 收件人
-        String to = "huyanna@xiaoneng.cn";// 收件人
+        String to = "machengkai@mlogcn.com";// 收件人
+//        String to = "huyanna@xiaoneng.cn";// 收件人
         String subject = VeDate.getNowDateString() + "数据整理统计情况汇报";           //"输入邮件主题";
         //邮箱内容
         StringBuffer sb = new StringBuffer();
