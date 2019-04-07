@@ -10,4 +10,6 @@ public class Config {
 //    	public static String DRIVER = "com.mysql.jdbc.Driver";
     public static String DRIVER ="com.mysql.cj.jdbc.Driver";
     public static String Unicode ="?characterEncoding=UTF-8";
+    public static String DB_QunQun_SERVER = "47.92.216.138";
+    public static String DB_QunQun_PWD ="Mitu1123...";
 }

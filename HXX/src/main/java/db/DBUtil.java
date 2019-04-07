@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.mysql.cj.xdevapi.SqlDataResult;
 import org.apache.log4j.Logger;
 
 
@@ -17,8 +18,15 @@ public class DBUtil {
     public void DBUtilInit(String dbName) {
         try {
             Class.forName(Config.DRIVER);
-            String url ="jdbc:mysql://" + Config.DB_SERVER + ":" + Config.DB_PORT + "/" + dbName + Config.Unicode;
-            conn = DriverManager.getConnection(url, Config.DB_USER, Config.DB_PASSWORD);
+            String url = "";
+            if (dbName.equals("meteo_qq")) {
+                url = "jdbc:mysql://" + Config.DB_QunQun_SERVER + ":" + Config.DB_PORT + "/" + dbName + Config.Unicode;
+                conn = DriverManager.getConnection(url, Config.DB_USER, Config.DB_QunQun_PWD);
+
+            } else {
+                url = "jdbc:mysql://" + Config.DB_SERVER + ":" + Config.DB_PORT + "/" + dbName + Config.Unicode;
+                conn = DriverManager.getConnection(url, Config.DB_USER, Config.DB_PASSWORD);
+            }
             if (conn != null) {
                 logger.info("Succeeded connecting to the Database!");
             }
@@ -47,9 +55,42 @@ public class DBUtil {
 
     }
 
+    /***
+     * 统计用户下注问题和下注次数和数量，按天统计
+     */
+    public ResultSet sqlQueryUserGuessDetail(String data){
+        ResultSet rs = null;
+        String sql = "SELECT g.start_time as time,u.id as userid,u.nickname as nickname,g.title as title,IF (d.option_id=0,d.`option`,o.content) AS content,COUNT(u.id) AS count,SUM(d.mount) AS summount FROM `mg_activity_guess_detail` AS d LEFT JOIN mg_service_user AS u ON u.id=d.user_id LEFT JOIN mg_activity_guess AS g ON g.id=d.guess_id LEFT JOIN mg_activity_guess_option AS o ON o.id=d.option_id WHERE g.start_time=? GROUP BY o.content,u.nickname";
+        PreparedStatement pstmt;
+        try{
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1,data);
+            rs = pstmt.executeQuery();
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return rs;
+    }
+    /***
+     * 统计用户下注的次数和下注的数量
+     * @return
+     */
+    public ResultSet sqlQueryUserCountAndMount() {
+        ResultSet rs = null;
+        String sql = "SELECT u.id as userid,u.nickname as nickname,COUNT(u.id) as count, SUM(d.mount) as mount FROM `mg_activity_guess_detail` as d LEFT JOIN mg_service_user as u on d.user_id=u.id GROUP BY d.user_id";
+//      String sql="SELECT start_time,city,total_amount/100 as total_amount FROM mg_activity_guess  where start_time=?";
+        Statement stmt;
+        try {
+            rs = conn.createStatement().executeQuery(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return rs;
+    }
+
     /****
      * @说明：查询天气宝每日盈亏
-     * @param date
+     * @param
      * @return
      */
     public ResultSet sqlQueryPre(String datetime) {
@@ -67,7 +108,7 @@ public class DBUtil {
         return rs;
     }
 
-    public List<Integer> sqlSumPersons(){
+    public List<Integer> sqlSumPersons() {
         ResultSet rs = null;
         ResultSet rs1 = null;
         List<Integer> list = new ArrayList<Integer>();
@@ -75,19 +116,19 @@ public class DBUtil {
         String sql1 = "SELECT count(user_id)as count from (SELECT DISTINCT(user_id) as user_id from mg_activity_guess_detail g JOIN mg_activity_guess dd on g.guess_id = dd.id WHERE dd.type='预测' ) as TTT";
         Statement st;
         Statement st1;
-        try{
+        try {
             rs = conn.createStatement().executeQuery(sql);
             rs1 = conn.createStatement().executeQuery(sql1);
-            if(rs.next()){
+            if (rs.next()) {
                 list.add(Integer.parseInt(rs.getString("count")));
             }
-            if(rs1.next()){
+            if (rs1.next()) {
                 list.add(Integer.parseInt(rs1.getString("count")));
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
-        return  list;
+        return list;
     }
 
     /***
@@ -100,7 +141,7 @@ public class DBUtil {
         ResultSet rs = null;
         ResultSet rs1 = null;
         List<String> list = new ArrayList<String>();
-        String sql = "SELECT c.time as time, count(c.userid) as number FROM ( SELECT g.start_time AS time, d.user_id AS userid FROM mg_activity_guess_detail d JOIN mg_activity_guess g ON g.id = d.guess_id WHERE g.start_time = ? AND g.type =? GROUP BY d.user_id ) AS c";
+        String sql = "SELECT  count(c.userid) as number FROM ( SELECT g.start_time AS time, d.user_id AS userid FROM mg_activity_guess_detail d JOIN mg_activity_guess g ON g.id = d.guess_id WHERE g.start_time = ? AND g.type =? GROUP BY d.user_id ) AS c";
         String sql1 = "SELECT count(d.id) as count FROM mg_activity_guess_detail d JOIN mg_activity_guess g ON d.guess_id = g.id WHERE g.type=? and g.start_time = ?";
 
         PreparedStatement pstmt, pstmt1;
@@ -115,11 +156,16 @@ public class DBUtil {
             rs1 = pstmt1.executeQuery();
 //            System.out.println("长度"+rs.last());
             if (rs.next()) {
+                list.add(datetime);
+                list.add(rs.getString("number"));
+                if (rs1.next()){
+                    list.add(rs1.getString("count"));
+                }
+                /**原来的sql语句在qq数据库中不支持，先去掉一个time字段的展示，注销原来的
                 if (rs.getString("time") == null) {
                     list.add(datetime);
                     list.add(rs.getString("number"));
-                }
-                else {
+                } else {
                     list.add(rs.getString("time"));
                     list.add(rs.getString("number"));
                 }
@@ -127,6 +173,16 @@ public class DBUtil {
                 if (rs1.next()) {
                     list.add(rs1.getString("count"));
                 }
+                 */
+//            } else if (rs == null) {    //添加查询到的天气宝人数为空的情况处理
+//                list.add(datetime);
+//                list.add("0");
+//                if (rs1.next()) {
+//                    list.add(rs1.getString("count"));
+//                } else {
+//                    list.add("0");
+//                }
+
             }
 //            pstmt.close();
 //            pstmt1.close();
@@ -157,7 +213,7 @@ public class DBUtil {
             pstmt3 = conn.prepareStatement(sqlWin);
             pstmt3.setString(1, datetime);
             rs1 = pstmt3.executeQuery();
-            if(rs1==null){
+            if (rs1 == null) {
                 pstmt3 = conn.prepareStatement(sqlNoWin);
                 pstmt3.setString(1, datetime);
                 rs1 = pstmt3.executeQuery();
@@ -262,7 +318,6 @@ public class DBUtil {
     /**
      * get ResultSet
      *
-     * @param conn
      * @param sql
      * @return
      * @throws Exception
@@ -332,7 +387,6 @@ public class DBUtil {
     /**
      * get RowCount
      *
-     * @param conn
      * @param sql
      * @return
      * @throws Exception
@@ -378,7 +432,6 @@ public class DBUtil {
     /**
      * get data by row index and col index
      *
-     * @param conn
      * @param sql
      * @param row
      * @param col
@@ -424,7 +477,6 @@ public class DBUtil {
     /**
      * get data by row index and col index
      *
-     * @param conn
      * @param sql
      * @param row
      * @param field

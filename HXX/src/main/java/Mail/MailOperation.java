@@ -49,25 +49,43 @@ public class MailOperation {
                 // 设置文本消息部分
                 multipart.addBodyPart(mbp1);
                 //添加附件文件
+//
+//                for(int i=0;i<filename.length;i++){
+//                    MimeBodyPart mbp = new MimeBodyPart();
+//                    System.out.println(filename[i]);
+//                    DataSource source = new FileDataSource(filename[i]);
+//                    mbp.setDataHandler(new DataHandler(source));
+//                    // 处理附件名称中文（附带文件路径）乱码问题
+//                    mbp.setFileName(MimeUtility.encodeText(filename[i]));
+//                    multipart.addBodyPart(mbp);
+//                }
                 MimeBodyPart mbp2 = new MimeBodyPart();
-//                for(int i=0;i<filename.length;i++){
-                    System.out.println(filename[0]);
-                    DataSource source = new FileDataSource(filename[0]);
-                    mbp2.setDataHandler(new DataHandler(source));
-                   // 处理附件名称中文（附带文件路径）乱码问题
-                    mbp2.setFileName(MimeUtility.encodeText(filename[0]));
-                    multipart.addBodyPart(mbp2);
+                System.out.println(filename[0]);
+                DataSource source = new FileDataSource(filename[0]);
+                mbp2.setDataHandler(new DataHandler(source));
+                // 处理附件名称中文（附带文件路径）乱码问题
+                mbp2.setFileName(MimeUtility.encodeText(filename[0]));
+                multipart.addBodyPart(mbp2);
 
-
+//
                 MimeBodyPart mbp3 = new MimeBodyPart();
-//                for(int i=0;i<filename.length;i++){
                 System.out.println(filename[1]);
                 DataSource source1 = new FileDataSource(filename[1]);
                 mbp3.setDataHandler(new DataHandler(source1));
                 // 处理附件名称中文（附带文件路径）乱码问题
                 mbp3.setFileName(MimeUtility.encodeText(filename[1]));
                 multipart.addBodyPart(mbp3);
-//                }
+
+
+                MimeBodyPart mbp4 = new MimeBodyPart();
+                System.out.println(filename[2]);
+                DataSource source2 = new FileDataSource(filename[2]);
+                mbp4.setDataHandler(new DataHandler(source2));
+                // 处理附件名称中文（附带文件路径）乱码问题
+                mbp4.setFileName(MimeUtility.encodeText(filename[2]));
+                multipart.addBodyPart(mbp4);
+
+
                 message.setContent(multipart);
                 message.setSentDate(new Date());
                 message.saveChanges();
