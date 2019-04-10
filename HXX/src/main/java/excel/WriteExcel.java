@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +31,7 @@ public class WriteExcel {
         Map<String, String> sheet5 = new HashMap<String, String>();
         Map<String, String> sheet6 = new HashMap<String, String>();
         Map<String, String> sheet7 = new HashMap<String, String>();
+        Map<String, String> sheet8 = new HashMap<String, String>();
 
         String sheetName1 = "天气宝每日盈亏";
         String sheetName2 = "天气宝每日参与人数及人次";
@@ -37,6 +40,7 @@ public class WriteExcel {
         String sheetName5 = "至今参与总人数";
         String sheetName6 ="用户下注次数和下注数量";
         String sheetName7 ="用户下注问题详情";
+        String sheetName8 ="下注选项所占比例详情";
         sheet1.put("cell0", "日期");
         sheet1.put("cell1", "城市");
         sheet1.put("cell2", "题目");
@@ -77,6 +81,14 @@ public class WriteExcel {
         sheet7.put("cell5","用户下注次数");
         sheet7.put("cell6","用户下注数量");
 
+        sheet8.put("cell0","日期");
+        sheet8.put("cell1","活动id");
+        sheet8.put("cell2","用户下注问题");
+        sheet8.put("cell3","用户下注选项");
+        sheet8.put("cell4","用户下注选项数量");
+        sheet8.put("cell5","选项数量所占比例");
+        sheet8.put("cell6","选项下注的人数");
+
         File file = new File(filepath);
         if (!file.exists()) {
             try {
@@ -91,6 +103,7 @@ public class WriteExcel {
                 workBook.createSheet();
                 workBook.createSheet();
                 workBook.createSheet();
+                workBook.createSheet();
                 workBook.setSheetName(0, sheetName1);
                 workBook.setSheetName(1, sheetName2);
                 workBook.setSheetName(2, sheetName3);
@@ -98,6 +111,7 @@ public class WriteExcel {
                 workBook.setSheetName(4, sheetName5);
                 workBook.setSheetName(5, sheetName6);
                 workBook.setSheetName(6, sheetName7);
+                workBook.setSheetName(7, sheetName8);
                 int sheetNumber = workBook.getNumberOfSheets();
                 for (int sheet = 0; sheet < sheetNumber; sheet++) {
                     Sheet sheetWork = workBook.getSheetAt(sheet);
@@ -138,6 +152,11 @@ public class WriteExcel {
                         for (int i = 0; i < sheet7.size(); i++) {
                             Cell cellName = row.createCell(i);
                             cellName.setCellValue(sheet7.get("cell" + i));
+                        }
+                    } else if(sheet==7){
+                        for (int i = 0; i < sheet8.size(); i++) {
+                            Cell cellName = row.createCell(i);
+                            cellName.setCellValue(sheet8.get("cell" + i));
                         }
                     }
                 }
@@ -549,6 +568,96 @@ public class WriteExcel {
                     Cell seven = row.createCell(6);
                     seven.setCellValue(cost);
                 }
+            }
+            // 创建文件输出流，准备输出电子表格：这个必须有，否则你在sheet上做的任何操作都不会有效
+            out = new FileOutputStream(finalXlsxPath);
+            workBook.write(out);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null) {
+                    out.flush();
+                    out.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+//        System.out.println("数据导出成功");
+    }
+
+
+    //写书sheet7，展示用户下注的问题详情
+    public  void writeExcelSheet8(Listmap dataList, Map map,String finalXlsxPath) {
+        OutputStream out = null;
+        try {
+            // 获取总列数
+//            int columnNumCount = dataList.size();
+            // 读取Excel文档
+            File finalXlsxFile = new File(finalXlsxPath);
+            Workbook workBook = getWorkbok(finalXlsxFile);
+            // sheet 对应一个工作页
+            Sheet sheet = workBook.getSheetAt(7);
+//            String sheetname = sheet.getSheetName();
+//            System.out.println(sheetname);
+
+
+            int rowNumber = sheet.getLastRowNum()+1;    // 第一行从0开始算
+//            System.out.println("原始数据总行数，除属性列：" + rowNumber);
+//            for (int i = 1; i <= rowNumber; i++) {
+//                Row row = sheet.getRow(i);
+//                sheet.removeRow(row);
+//            }
+//            // 创建文件输出流，输出电子表格：这个必须有，否则你在sheet上做的任何操作都不会有效
+//            out =  new FileOutputStream(finalXlsxPath);
+//            workBook.write(out);
+            /**
+             * 往Excel中写新数据
+             */
+            for (int j = 0; j < dataList.size(); j++) {
+                // 创建一行：从第二行开始，跳过属性列
+                Row row = sheet.createRow(j + rowNumber + 1);
+                // 得到要插入的每一条记录
+                Map<String, String> dataMap = dataList.index(j);
+                String time = dataMap.get("start_time");
+                String guess_id = dataMap.get("guess_id");
+                String title = dataMap.get("title");
+                String optionName = dataMap.get("optionName");
+                String optionCount = dataMap.get("optionCount");
+                NumberFormat num = NumberFormat.getPercentInstance();
+                double fenzi = Double.parseDouble(optionCount);
+                double fenmu = Double.parseDouble(map.get(guess_id).toString());
+                double result = fenzi / fenmu;
+                DecimalFormat df = new DecimalFormat();
+                df.applyPattern("0.00%");
+                String optionCountPercent =df.format(result);
+                String userCount = dataMap.get("userCount");
+//                for (int k = 0; k < dataMap.size(); k++) {
+                    // 在一行内循环
+                    Cell first = row.createCell(0);
+                    first.setCellValue(time);
+
+                    Cell second = row.createCell(1);
+                    second.setCellValue(guess_id);
+
+                    Cell third = row.createCell(2);
+                    third.setCellValue(title);
+
+                    Cell four = row.createCell(3);
+                    four.setCellValue(optionName);
+
+                    Cell fifth = row.createCell(4);
+                    fifth.setCellValue(optionCount);
+
+                    Cell six = row.createCell(5);
+                    six.setCellValue(optionCountPercent);
+
+                    Cell seven = row.createCell(6);
+                    seven.setCellValue(userCount);
+
+
+//                }
             }
             // 创建文件输出流，准备输出电子表格：这个必须有，否则你在sheet上做的任何操作都不会有效
             out = new FileOutputStream(finalXlsxPath);

@@ -5,6 +5,7 @@ import db.VeDate;
 import excel.WriteExcel;
 import java.sql.ResultSet;
 import java.util.List;
+import java.util.Map;
 
 public class TestXSSF {
 
@@ -43,6 +44,16 @@ public class TestXSSF {
             userGuessDetail = db.getResultMapList(userGuessDetailRS);
             writeExcel.writeExcelSheet7(userGuessDetail,filePath);
             System.out.println(dbName[dateBase]+"数据库下用户下注详情及问题次数和数量统计完成");
+
+
+            //每个问题选项下注的次数比例及人数sheet8写入
+
+            ResultSet rs = db.sqlQueryPerQuestionAllCount(date1);
+            Map<String, String> map = db.selectMapShow(rs);
+            ResultSet rs1 = db.sqlQueryPerQuestionPerAnswer(date1);
+            Listmap listmap =db.getResultMapList(rs1);
+            writeExcel.writeExcelSheet8(listmap,map,filePath);
+            System.out.println(dbName[dateBase]+"数据库下每个问题选项占比统计完成！！");
 
             //至今参与总人数sheet的写入
             List sumCount;

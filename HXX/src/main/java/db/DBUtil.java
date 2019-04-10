@@ -56,21 +56,56 @@ public class DBUtil {
     }
 
     /***
-     * 统计用户下注问题和下注次数和数量，按天统计
+     * 统计每个问题下的选项的下注次数和人数
      */
-    public ResultSet sqlQueryUserGuessDetail(String data){
+    public ResultSet sqlQueryPerQuestionPerAnswer(String data) {
         ResultSet rs = null;
-        String sql = "SELECT g.start_time as time,u.id as userid,u.nickname as nickname,g.title as title,IF (d.option_id=0,d.`option`,o.content) AS content,COUNT(u.id) AS count,SUM(d.mount) AS summount FROM `mg_activity_guess_detail` AS d LEFT JOIN mg_service_user AS u ON u.id=d.user_id LEFT JOIN mg_activity_guess AS g ON g.id=d.guess_id LEFT JOIN mg_activity_guess_option AS o ON o.id=d.option_id WHERE g.start_time=? GROUP BY o.content,u.nickname";
+        String sql = "SELECT g.start_time,d.guess_id,g.title,IFNULL(o.content,0) as optionName,COUNT(d.option_id) as optionCount,COUNT(DISTINCT d.user_id) as userCount FROM mg_activity_guess_detail AS d LEFT JOIN mg_activity_guess AS g ON g.id=d.guess_id LEFT JOIN mg_activity_guess_option AS o ON o.id=d.option_id WHERE g.start_time=? GROUP BY d.option_id";
         PreparedStatement pstmt;
-        try{
+        try {
             pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1,data);
+            pstmt.setString(1, data);
             rs = pstmt.executeQuery();
-        }catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return rs;
     }
+
+    /***
+     * 统计每个问题所有选项的次数
+     */
+    public ResultSet sqlQueryPerQuestionAllCount(String data) {
+        ResultSet rs = null;
+        String sql = "SELECT d.guess_id as guessid,COUNT(d.guess_id) as guesscount FROM mg_activity_guess_detail AS d LEFT JOIN mg_activity_guess AS g ON g.id=d.guess_id WHERE g.start_time=? GROUP BY d.guess_id";
+        PreparedStatement pstmt;
+        try {
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, data);
+            rs = pstmt.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return rs;
+    }
+
+    /***
+     * 统计用户下注问题和下注次数和数量，按天统计
+     */
+    public ResultSet sqlQueryUserGuessDetail(String data) {
+        ResultSet rs = null;
+        String sql = "SELECT g.start_time as time,u.id as userid,u.nickname as nickname,g.title as title,IF (d.option_id=0,d.`option`,o.content) AS content,COUNT(u.id) AS count,SUM(d.mount) AS summount FROM `mg_activity_guess_detail` AS d LEFT JOIN mg_service_user AS u ON u.id=d.user_id LEFT JOIN mg_activity_guess AS g ON g.id=d.guess_id LEFT JOIN mg_activity_guess_option AS o ON o.id=d.option_id WHERE g.start_time=? GROUP BY o.content,u.nickname";
+        PreparedStatement pstmt;
+        try {
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, data);
+            rs = pstmt.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return rs;
+    }
+
     /***
      * 统计用户下注的次数和下注的数量
      * @return
@@ -158,21 +193,21 @@ public class DBUtil {
             if (rs.next()) {
                 list.add(datetime);
                 list.add(rs.getString("number"));
-                if (rs1.next()){
-                    list.add(rs1.getString("count"));
-                }
-                /**原来的sql语句在qq数据库中不支持，先去掉一个time字段的展示，注销原来的
-                if (rs.getString("time") == null) {
-                    list.add(datetime);
-                    list.add(rs.getString("number"));
-                } else {
-                    list.add(rs.getString("time"));
-                    list.add(rs.getString("number"));
-                }
-
                 if (rs1.next()) {
                     list.add(rs1.getString("count"));
                 }
+                /**原来的sql语句在qq数据库中不支持，先去掉一个time字段的展示，注销原来的
+                 if (rs.getString("time") == null) {
+                 list.add(datetime);
+                 list.add(rs.getString("number"));
+                 } else {
+                 list.add(rs.getString("time"));
+                 list.add(rs.getString("number"));
+                 }
+
+                 if (rs1.next()) {
+                 list.add(rs1.getString("count"));
+                 }
                  */
 //            } else if (rs == null) {    //添加查询到的天气宝人数为空的情况处理
 //                list.add(datetime);
@@ -261,6 +296,20 @@ public class DBUtil {
 
     }
 
+    //针对查询出每个下注问题的总数量的处理方式
+    public Map<String, String> selectMapShow(ResultSet rs) {
+        Map<String, String> map = new HashMap<String, String>();
+        try {
+            while (rs.next()) {
+                String key = rs.getString(1);
+                String value = rs.getString(2);
+                map.put(key, value);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return map;
+    }
 
     public Listmap getResultMapList(ResultSet rs) {
         List<Map<String, String>> rsl = new ArrayList<Map<String, String>>();
@@ -283,6 +332,36 @@ public class DBUtil {
 
         return (new Listmap(rsl));
     }
+
+    //针对要计算每个问题的选项的下注的比例
+//    public Listmap getResultChangePercent(ResultSet rs, Map resultmap) {
+//        List<Map<String, String>> rsl = new ArrayList<Map<String, String>>();
+//        try {
+//            while (rs.next()) {
+//                Map<String, String> hm = new HashMap<String, String>();
+//                ResultSetMetaData rsmd = rs.getMetaData();
+//                int count = rsmd.getColumnCount();
+//                String
+//                for (int i = 1; i <= count; i++) {
+//                    String key = rsmd.getColumnLabel(i);
+//                    String value = rs.getString(i);
+//                    if (key.equals("guess_id")) {
+//                        double fenzi = Double.parseDouble(value);
+//                        double fenmu = Double.parseDouble(resultmap.get(key).toString());
+//                        double result = fenzi / fenmu;
+//                        value = String.format("%.2f", result);
+//                    }
+//                    hm.put(key, value);
+//                }
+//                rsl.add(hm);
+//
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        return (new Listmap(rsl));
+//    }
 
     public int update(String sql) {
         logger.info("=============更新sql成功============");
