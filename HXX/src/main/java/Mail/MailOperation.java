@@ -60,7 +60,7 @@ public class MailOperation {
 //                    multipart.addBodyPart(mbp);
 //                }
                 MimeBodyPart mbp2 = new MimeBodyPart();
-                System.out.println(filename[0]);
+//                System.out.println(filename[0]);
                 DataSource source = new FileDataSource(filename[0]);
                 mbp2.setDataHandler(new DataHandler(source));
                 // 处理附件名称中文（附带文件路径）乱码问题
@@ -69,7 +69,7 @@ public class MailOperation {
 
 //
                 MimeBodyPart mbp3 = new MimeBodyPart();
-                System.out.println(filename[1]);
+//                System.out.println(filename[1]);
                 DataSource source1 = new FileDataSource(filename[1]);
                 mbp3.setDataHandler(new DataHandler(source1));
                 // 处理附件名称中文（附带文件路径）乱码问题
@@ -78,7 +78,7 @@ public class MailOperation {
 
 
                 MimeBodyPart mbp4 = new MimeBodyPart();
-                System.out.println(filename[2]);
+//                System.out.println(filename[2]);
                 DataSource source2 = new FileDataSource(filename[2]);
                 mbp4.setDataHandler(new DataHandler(source2));
                 // 处理附件名称中文（附带文件路径）乱码问题
