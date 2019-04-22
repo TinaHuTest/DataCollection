@@ -19,11 +19,13 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import tools.Percentage;
 
 public class WriteExcel {
     private static final String EXCEL_XLS = "xls";
     private static final String EXCEL_XLSX = "xlsx";
-    public  boolean initExcel(String projectName,String filepath)  {
+
+    public boolean initExcel(String projectName, String filepath) {
         Map<String, String> sheet1 = new HashMap<String, String>();
         Map<String, String> sheet2 = new HashMap<String, String>();
         Map<String, String> sheet3 = new HashMap<String, String>();
@@ -38,9 +40,9 @@ public class WriteExcel {
         String sheetName3 = "城市纷争每日盈亏";
         String sheetName4 = "列城每日人数及人次";
         String sheetName5 = "至今参与总人数";
-        String sheetName6 ="用户下注次数和下注数量";
-        String sheetName7 ="用户下注问题详情";
-        String sheetName8 ="下注选项所占比例详情";
+        String sheetName6 = "用户下注次数和下注数量";
+        String sheetName7 = "用户下注问题详情";
+        String sheetName8 = "下注选项所占比例详情";
         sheet1.put("cell0", "日期");
         sheet1.put("cell1", "城市");
         sheet1.put("cell2", "题目");
@@ -63,31 +65,37 @@ public class WriteExcel {
         sheet4.put("cell1", "人数");
         sheet4.put("cell2", "人次");
 
-        sheet5.put("cell0","日期");
-        sheet5.put("cell1","竞猜总人数");
-        sheet5.put("cell2","预测总人数");
+        sheet5.put("cell0", "日期");
+        sheet5.put("cell1", "竞猜总人数");
+        sheet5.put("cell2", "预测总人数");
 
-        sheet6.put("cell0","用户ID");
-        sheet6.put("cell1","用户昵称");
-        sheet6.put("cell2","用户下注次数");
-        sheet6.put("cell3","用户下注数量");
+        sheet6.put("cell0", "日期");
+        sheet6.put("cell1", "用户ID");
+        sheet6.put("cell2", "用户昵称");
+        sheet6.put("cell3", "用户中奖次数");
+        sheet6.put("cell4", "用户没中奖次数");
+        sheet6.put("cell5", "用户总下注次数");
+        sheet6.put("cell6", "胜率(中奖/中奖+没中)");
+        sheet6.put("cell7", "用户总下注额");
 
+        sheet7.put("cell0", "日期");
+        sheet7.put("cell1", "用户ID");
+        sheet7.put("cell2", "用户昵称");
+        sheet7.put("cell3", "用户下注问题");
+        sheet7.put("cell4", "用户下注问题选项");
+        sheet7.put("cell5", "用户下注次数");
+        sheet7.put("cell6", "用户下注数量");
 
-        sheet7.put("cell0","日期");
-        sheet7.put("cell1","用户ID");
-        sheet7.put("cell2","用户昵称");
-        sheet7.put("cell3","用户下注问题");
-        sheet7.put("cell4","用户下注问题选项");
-        sheet7.put("cell5","用户下注次数");
-        sheet7.put("cell6","用户下注数量");
-
-        sheet8.put("cell0","日期");
-        sheet8.put("cell1","活动id");
-        sheet8.put("cell2","用户下注问题");
-        sheet8.put("cell3","用户下注选项");
-        sheet8.put("cell4","用户下注选项数量");
-        sheet8.put("cell5","选项数量所占比例");
-        sheet8.put("cell6","选项下注的人数");
+        sheet8.put("cell0", "日期");
+        sheet8.put("cell1", "活动id");
+        sheet8.put("cell2", "用户下注问题");
+        sheet8.put("cell3", "用户下注选项");
+        sheet8.put("cell4", "用户下注选项数量");
+        sheet8.put("cell5", "选项数量所占比例");
+        sheet8.put("cell6", "选项下注的人数");
+        sheet8.put("cell7", "次选项下注额");
+        sheet8.put("cell8", "次问题下注总额");
+        sheet8.put("cell9", "此选项下注额占比");
 
         File file = new File(filepath);
         if (!file.exists()) {
@@ -123,37 +131,37 @@ public class WriteExcel {
                             cellName.setCellValue(sheet1.get("cell" + i));
 //                            System.out.println(sheet1.get("cell"+i));
                         }
-                    }else if (sheet==1){
+                    } else if (sheet == 1) {
                         for (int i = 0; i < sheet2.size(); i++) {
                             Cell cellName = row.createCell(i);
                             cellName.setCellValue(sheet2.get("cell" + i));
                         }
-                    }else if (sheet==2){
+                    } else if (sheet == 2) {
                         for (int i = 0; i < sheet3.size(); i++) {
                             Cell cellName = row.createCell(i);
                             cellName.setCellValue(sheet3.get("cell" + i));
                         }
-                    }else if (sheet==3){
+                    } else if (sheet == 3) {
                         for (int i = 0; i < sheet4.size(); i++) {
                             Cell cellName = row.createCell(i);
                             cellName.setCellValue(sheet4.get("cell" + i));
                         }
-                    }else if (sheet==4){
+                    } else if (sheet == 4) {
                         for (int i = 0; i < sheet5.size(); i++) {
                             Cell cellName = row.createCell(i);
                             cellName.setCellValue(sheet5.get("cell" + i));
                         }
-                    }else if(sheet==5){
+                    } else if (sheet == 5) {
                         for (int i = 0; i < sheet6.size(); i++) {
                             Cell cellName = row.createCell(i);
                             cellName.setCellValue(sheet6.get("cell" + i));
                         }
-                    } else if(sheet==6){
+                    } else if (sheet == 6) {
                         for (int i = 0; i < sheet7.size(); i++) {
                             Cell cellName = row.createCell(i);
                             cellName.setCellValue(sheet7.get("cell" + i));
                         }
-                    } else if(sheet==7){
+                    } else if (sheet == 7) {
                         for (int i = 0; i < sheet8.size(); i++) {
                             Cell cellName = row.createCell(i);
                             cellName.setCellValue(sheet8.get("cell" + i));
@@ -166,13 +174,13 @@ public class WriteExcel {
             } catch (IOException e) {
                 System.out.println("File name not exist.");
                 e.printStackTrace();
-                return  false;
+                return false;
             }
         }
         return true;
     }
 
-    public  void writeExcel(Listmap dataList, String finalXlsxPath) {
+    public void writeExcel(Listmap dataList, String finalXlsxPath) {
         OutputStream out = null;
         try {
             // 获取总列数
@@ -186,7 +194,7 @@ public class WriteExcel {
 //            System.out.println(sheetname);
 
 
-            int rowNumber = sheet.getLastRowNum()+1;    // 第一行从0开始算
+            int rowNumber = sheet.getLastRowNum() + 1;    // 第一行从0开始算
 //            System.out.println("原始数据总行数，除属性列：" + rowNumber);
 //            for (int i = 1; i <= rowNumber; i++) {
 //                Row row = sheet.getRow(i);
@@ -309,7 +317,8 @@ public class WriteExcel {
         }
 //        System.out.println("数据导出成功");
     }
-    public  void writeExcelSheet3(Listmap dataList, String finalXlsxPath) {
+
+    public void writeExcelSheet3(Listmap dataList, String finalXlsxPath) {
         OutputStream out = null;
         try {
             // 获取总列数
@@ -382,7 +391,7 @@ public class WriteExcel {
 //        System.out.println("数据导出成功");
     }
 
-    public  void writeExcelSheet4(String date,List<Integer> sumCount, String finalXlsxPath) {
+    public void writeExcelSheet4(String date, List<Integer> sumCount, String finalXlsxPath) {
         OutputStream out = null;
         try {
             File finalXlsxFile = new File(finalXlsxPath);
@@ -407,7 +416,7 @@ public class WriteExcel {
              * 往Excel中写新数据
              */
             // 创建一行：从第二行开始，跳过属性列
-            Row row = sheet.createRow( rowNumber+ 1);
+            Row row = sheet.createRow(rowNumber + 1);
             Cell first = row.createCell(0);
             first.setCellValue(date);
 
@@ -439,7 +448,7 @@ public class WriteExcel {
      *  写入sheet6，写入用户的信息和用户下注数量和下注次数
      * @param finalXlsxPath
      */
-    public  void writeExcelSheet6(Listmap map, String finalXlsxPath) {
+    public void writeExcelSheet6(Listmap map, String finalXlsxPath) {
         OutputStream out = null;
         try {
             File finalXlsxFile = new File(finalXlsxPath);
@@ -451,14 +460,14 @@ public class WriteExcel {
             /**
              * 删除原有数据，除了属性列
              */
-            int rowNumber = sheet.getLastRowNum();    // 第一行从0开始算
-            System.out.println("原始数据总行数，除属性列：" + rowNumber);
-            for (int i = 1; i <= rowNumber; i++) {
-                Row row = sheet.getRow(i);
-                sheet.removeRow(row);
-            }
+            int rowNumber = sheet.getLastRowNum()+1;    // 第一行从0开始算
+//            System.out.println("原始数据总行数，除属性列：" + rowNumber);
+//            for (int i = 1; i <= rowNumber; i++) {
+//                Row row = sheet.getRow(i);
+//                sheet.removeRow(row);
+//            }
             // 创建文件输出流，输出电子表格：这个必须有，否则你在sheet上做的任何操作都不会有效
-            out =  new FileOutputStream(finalXlsxPath);
+            out = new FileOutputStream(finalXlsxPath);
             workBook.write(out);
             /**
              * 往Excel中写新数据
@@ -466,26 +475,42 @@ public class WriteExcel {
             // 创建一行：从第二行开始，跳过属性列
             for (int j = 0; j < map.size(); j++) {
                 // 创建一行：从第二行开始，跳过属性列
-                Row row = sheet.createRow(j+1);
+                Row row = sheet.createRow(j + rowNumber+1);
                 // 得到要插入的每一条记录
                 Map<String, String> dataMap = map.index(j);
+                String datatime = dataMap.get("datatime");
                 String userid = dataMap.get("userid");
                 String nickname = dataMap.get("nickname");
-                String count = dataMap.get("count");
+                String wincount = dataMap.get("wincount");
+                String losecount = dataMap.get("losecount");
+                String winpercentage = Percentage.winPercentage(wincount, losecount);
+                String sumcount = dataMap.get("sumcount");
                 String mount = dataMap.get("mount");
                 for (int k = 0; k < dataMap.size(); k++) {
                     // 在一行内循环
                     Cell first = row.createCell(0);
-                    first.setCellValue(userid);
+                    first.setCellValue(datatime);
 
                     Cell second = row.createCell(1);
-                    second.setCellValue(nickname);
+                    second.setCellValue(userid);
 
                     Cell third = row.createCell(2);
-                    third.setCellValue(count);
+                    third.setCellValue(nickname);
 
                     Cell four = row.createCell(3);
-                    four.setCellValue(mount);
+                    four.setCellValue(wincount);
+
+                    Cell five = row.createCell(4);
+                    five.setCellValue(losecount);
+
+                    Cell six = row.createCell(5);
+                    six.setCellValue(sumcount);
+
+                    Cell seven = row.createCell(6);
+                    seven.setCellValue(winpercentage);
+
+                    Cell eight = row.createCell(7);
+                    eight.setCellValue(mount);
 
                 }
             }
@@ -506,8 +531,9 @@ public class WriteExcel {
         }
 //        System.out.println("数据导出成功");
     }
+
     //写书sheet7，展示用户下注的问题详情
-    public  void writeExcelSheet7(Listmap dataList, String finalXlsxPath) {
+    public void writeExcelSheet7(Listmap dataList, String finalXlsxPath) {
         OutputStream out = null;
         try {
             // 获取总列数
@@ -521,7 +547,7 @@ public class WriteExcel {
 //            System.out.println(sheetname);
 
 
-            int rowNumber = sheet.getLastRowNum()+1;    // 第一行从0开始算
+            int rowNumber = sheet.getLastRowNum() + 1;    // 第一行从0开始算
 //            System.out.println("原始数据总行数，除属性列：" + rowNumber);
 //            for (int i = 1; i <= rowNumber; i++) {
 //                Row row = sheet.getRow(i);
@@ -589,7 +615,7 @@ public class WriteExcel {
 
 
     //写书sheet7，展示用户下注的问题详情
-    public  void writeExcelSheet8(Listmap dataList, Map map,String finalXlsxPath) {
+    public void writeExcelSheet8(Listmap dataList, Map map, Map map2, String finalXlsxPath) {
         OutputStream out = null;
         try {
             // 获取总列数
@@ -603,7 +629,7 @@ public class WriteExcel {
 //            System.out.println(sheetname);
 
 
-            int rowNumber = sheet.getLastRowNum()+1;    // 第一行从0开始算
+            int rowNumber = sheet.getLastRowNum() + 1;    // 第一行从0开始算
 //            System.out.println("原始数据总行数，除属性列：" + rowNumber);
 //            for (int i = 1; i <= rowNumber; i++) {
 //                Row row = sheet.getRow(i);
@@ -625,36 +651,42 @@ public class WriteExcel {
                 String title = dataMap.get("title");
                 String optionName = dataMap.get("optionName");
                 String optionCount = dataMap.get("optionCount");
-                NumberFormat num = NumberFormat.getPercentInstance();
-                double fenzi = Double.parseDouble(optionCount);
-                double fenmu = Double.parseDouble(map.get(guess_id).toString());
-                double result = fenzi / fenmu;
-                DecimalFormat df = new DecimalFormat();
-                df.applyPattern("0.00%");
-                String optionCountPercent =df.format(result);
+                String optionMount = dataMap.get("optionMount");
+                String sumMount = map2.get(guess_id).toString();
+                String optionCountPercent = Percentage.mountPercentage(optionCount, map.get(guess_id).toString());
+                String optionMountPercent = Percentage.mountPercentage(optionMount, map2.get(guess_id).toString());
                 String userCount = dataMap.get("userCount");
 //                for (int k = 0; k < dataMap.size(); k++) {
-                    // 在一行内循环
-                    Cell first = row.createCell(0);
-                    first.setCellValue(time);
+                // 在一行内循环
+                Cell first = row.createCell(0);
+                first.setCellValue(time);
 
-                    Cell second = row.createCell(1);
-                    second.setCellValue(guess_id);
+                Cell second = row.createCell(1);
+                second.setCellValue(guess_id);
 
-                    Cell third = row.createCell(2);
-                    third.setCellValue(title);
+                Cell third = row.createCell(2);
+                third.setCellValue(title);
 
-                    Cell four = row.createCell(3);
-                    four.setCellValue(optionName);
+                Cell four = row.createCell(3);
+                four.setCellValue(optionName);
 
-                    Cell fifth = row.createCell(4);
-                    fifth.setCellValue(optionCount);
+                Cell fifth = row.createCell(4);
+                fifth.setCellValue(optionCount);
 
-                    Cell six = row.createCell(5);
-                    six.setCellValue(optionCountPercent);
+                Cell six = row.createCell(5);
+                six.setCellValue(optionCountPercent);
 
-                    Cell seven = row.createCell(6);
-                    seven.setCellValue(userCount);
+                Cell seven = row.createCell(6);
+                seven.setCellValue(userCount);
+
+                Cell eight = row.createCell(7);
+                eight.setCellValue(optionMount);
+
+                Cell nine = row.createCell(8);
+                nine.setCellValue(sumMount);
+
+                Cell ten = row.createCell(9);
+                ten.setCellValue(optionMountPercent);
 
 
 //                }

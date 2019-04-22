@@ -60,7 +60,7 @@ public class DBUtil {
      */
     public ResultSet sqlQueryPerQuestionPerAnswer(String data) {
         ResultSet rs = null;
-        String sql = "SELECT g.start_time,d.guess_id,g.title,IFNULL(o.content,0) as optionName,COUNT(d.option_id) as optionCount,COUNT(DISTINCT d.user_id) as userCount FROM mg_activity_guess_detail AS d LEFT JOIN mg_activity_guess AS g ON g.id=d.guess_id LEFT JOIN mg_activity_guess_option AS o ON o.id=d.option_id WHERE g.start_time=? GROUP BY d.option_id";
+        String sql = "SELECT g.start_time,d.guess_id,g.title,IFNULL(o.content,0) as optionName,COUNT(d.option_id) as optionCount,COUNT(DISTINCT d.user_id) as userCount,SUM(d.mount) as optionMount FROM mg_activity_guess_detail AS d LEFT JOIN mg_activity_guess AS g ON g.id=d.guess_id LEFT JOIN mg_activity_guess_option AS o ON o.id=d.option_id WHERE g.start_time=? GROUP BY d.option_id";
         PreparedStatement pstmt;
         try {
             pstmt = conn.prepareStatement(sql);
@@ -88,7 +88,22 @@ public class DBUtil {
         }
         return rs;
     }
-
+    /***
+     * 统计每个问题所有选项的总下注额
+     */
+    public ResultSet sqlQueryPerQuestionAllMount(String data) {
+        ResultSet rs = null;
+        String sql = "SELECT d.guess_id as guessid,SUM(d.mount) as guessmount FROM mg_activity_guess_detail AS d LEFT JOIN mg_activity_guess AS g ON g.id=d.guess_id WHERE g.start_time=? GROUP BY d.guess_id";
+        PreparedStatement pstmt;
+        try {
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, data);
+            rs = pstmt.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return rs;
+    }
     /***
      * 统计用户下注问题和下注次数和数量，按天统计
      */
@@ -110,13 +125,16 @@ public class DBUtil {
      * 统计用户下注的次数和下注的数量
      * @return
      */
-    public ResultSet sqlQueryUserCountAndMount() {
+    public ResultSet sqlQueryUserCountAndMount(String data) {
         ResultSet rs = null;
-        String sql = "SELECT u.id as userid,u.nickname as nickname,COUNT(u.id) as count, SUM(d.mount) as mount FROM `mg_activity_guess_detail` as d LEFT JOIN mg_service_user as u on d.user_id=u.id GROUP BY d.user_id";
+        String sql = "SELECT g.start_time as datatime,u.id AS userid, u.nickname AS nickname, sum( CASE WHEN d.`status` = '恭喜中奖' THEN 1 ELSE 0 END ) AS wincount, sum( CASE WHEN d.`status` = '遗憾没中' THEN 1 ELSE 0 END ) AS losecount, COUNT(u.id) AS sumcount, SUM(d.mount) AS mount FROM mg_activity_guess_detail AS d LEFT JOIN mg_service_user AS u ON d.user_id = u.id LEFT JOIN mg_activity_guess AS g ON g.id = d.guess_id WHERE g.start_time = ? GROUP BY d.user_id";
+//        String sql = "SELECT u.id as userid,u.nickname as nickname,COUNT(u.id) as count, SUM(d.mount) as mount FROM `mg_activity_guess_detail` as d LEFT JOIN mg_service_user as u on d.user_id=u.id GROUP BY d.user_id";
 //      String sql="SELECT start_time,city,total_amount/100 as total_amount FROM mg_activity_guess  where start_time=?";
-        Statement stmt;
+        PreparedStatement pstmt;
         try {
-            rs = conn.createStatement().executeQuery(sql);
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, data);
+            rs = pstmt.executeQuery();
         } catch (SQLException e) {
             e.printStackTrace();
         }

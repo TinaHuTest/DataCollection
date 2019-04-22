@@ -13,6 +13,7 @@ public class TestXSSF {
         MainTestMail sendMail = new MainTestMail();
         String[] dbName={"meteo_slt","meteo_bkb","meteo_qq"};
         String  date1 = VeDate.getParmDateString();
+//        String date1="2019-04-19 00:00:00";
         String[] fileSend = new String[dbName.length];
         for (int dateBase= 0;dateBase<dbName.length;dateBase++){
             DBUtil db = new DBUtil();
@@ -33,7 +34,7 @@ public class TestXSSF {
 
             //用户下注次数和下注数量sheet6写入
             Listmap userCountAndMount ;
-            ResultSet userResultSet = db.sqlQueryUserCountAndMount();
+            ResultSet userResultSet = db.sqlQueryUserCountAndMount(date1);
             userCountAndMount = db.getResultMapList(userResultSet);
             writeExcel.writeExcelSheet6(userCountAndMount,filePath);
             System.out.println(dbName[dateBase]+"数据库下用户下注次数和数量统计完成");
@@ -49,10 +50,12 @@ public class TestXSSF {
             //每个问题选项下注的次数比例及人数sheet8写入
 
             ResultSet rs = db.sqlQueryPerQuestionAllCount(date1);
+            ResultSet rs2 = db.sqlQueryPerQuestionAllMount(date1);
             Map<String, String> map = db.selectMapShow(rs);
+            Map<String, String> map2 = db.selectMapShow(rs2);
             ResultSet rs1 = db.sqlQueryPerQuestionPerAnswer(date1);
             Listmap listmap =db.getResultMapList(rs1);
-            writeExcel.writeExcelSheet8(listmap,map,filePath);
+            writeExcel.writeExcelSheet8(listmap,map,map2,filePath);
             System.out.println(dbName[dateBase]+"数据库下每个问题选项占比统计完成！！");
 
             //至今参与总人数sheet的写入
