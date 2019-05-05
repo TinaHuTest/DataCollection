@@ -13,7 +13,7 @@ public class TestXSSF {
         MainTestMail sendMail = new MainTestMail();
         String[] dbName={"meteo_slt","meteo_bkb","meteo_qq"};
         String  date1 = VeDate.getParmDateString();
-//        String date1="2019-04-19 00:00:00";
+//        String date1="2019-05-01 00:00:00";
         String[] fileSend = new String[dbName.length];
         for (int dateBase= 0;dateBase<dbName.length;dateBase++){
             DBUtil db = new DBUtil();
@@ -25,12 +25,22 @@ public class TestXSSF {
             writeExcel.initExcel(dbName[dateBase],filePath);
 
             String[] typeArray = { "预测","竞猜"};
+
             //天气宝每日盈亏sheet的写入
-            Listmap sqlMap ;
-            ResultSet resultSet = db.sqlQueryPre(date1);
-            sqlMap = db.getResultMapList(resultSet);
-            writeExcel.writeExcel(sqlMap,filePath);
-            System.out.println(dbName[dateBase]+"数据库下天气宝每日盈亏统计完成");
+            if(dbName[dateBase].equals("meteo_bkb")){
+                Listmap sqlMap ;
+                ResultSet resultSet = db.sqlQueryPreBKB(date1);
+                sqlMap = db.getResultMapList(resultSet);
+                writeExcel.writeExcelBKB(sqlMap,filePath);
+                System.out.println(dbName[dateBase]+"数据库下天气宝每日盈亏统计完成");
+            }
+            else {
+                Listmap sqlMap ;
+                ResultSet resultSet = db.sqlQueryPre(date1);
+                sqlMap = db.getResultMapList(resultSet);
+                writeExcel.writeExcel(sqlMap,filePath);
+                System.out.println(dbName[dateBase]+"数据库下天气宝每日盈亏统计完成");
+            }
 
             //用户下注次数和下注数量sheet6写入
             Listmap userCountAndMount ;

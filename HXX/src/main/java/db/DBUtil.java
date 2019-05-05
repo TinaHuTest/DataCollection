@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.mysql.cj.xdevapi.SqlDataResult;
 import org.apache.log4j.Logger;
 
 
@@ -160,6 +159,27 @@ public class DBUtil {
         }
         return rs;
     }
+
+    /****
+     * @说明：查询天气宝每日盈亏
+     * @param
+     * @return
+     */
+    public ResultSet sqlQueryPreBKB(String datetime) {
+        ResultSet rs = null;
+        String sql = "SELECT g.start_time AS time, g.city AS city, g.title AS title, g.answer AS answer, g.total_amount / 100 AS total_amount, IF ( o.total_amount = 0, g.total_amount / 100, ( g.total_amount - o.total_amount ) / 1000 ) AS cost FROM mg_activity_guess g JOIN mg_activity_guess_option o ON o.guess_id = g.id AND o.content = g.answer WHERE g.type = '竞猜' AND g.start_time = ?";
+//      String sql="SELECT start_time,city,total_amount/100 as total_amount FROM mg_activity_guess  where start_time=?";
+        PreparedStatement pstmt;
+        try {
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, datetime);
+            rs = pstmt.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return rs;
+    }
+
 
     public List<Integer> sqlSumPersons() {
         ResultSet rs = null;

@@ -260,6 +260,73 @@ public class WriteExcel {
 //        System.out.println("数据导出成功");
     }
 
+    public void writeExcelBKB(Listmap dataList, String finalXlsxPath) {
+        OutputStream out = null;
+        try {
+            // 获取总列数
+//            int columnNumCount = dataList.size();
+            // 读取Excel文档
+            File finalXlsxFile = new File(finalXlsxPath);
+            Workbook workBook = getWorkbok(finalXlsxFile);
+            // sheet 对应一个工作页
+            Sheet sheet = workBook.getSheetAt(0);
+            int rowNumber = sheet.getLastRowNum() + 1;    // 第一行从0开始算
+            /**
+             * 往Excel中写新数据
+             */
+            for (int j = 0; j < dataList.size(); j++) {
+                // 创建一行：从第二行开始，跳过属性列
+                Row row = sheet.createRow(j + rowNumber + 1);
+                // 得到要插入的每一条记录
+                Map<String, String> dataMap = dataList.index(j);
+                String time = dataMap.get("time");
+                String city = dataMap.get("city");
+                String title = dataMap.get("title");
+                String answer = dataMap.get("answer");
+                String total_amount = dataMap.get("total_amount");
+                String cost = dataMap.get("cost");
+                for (int k = 0; k < dataMap.size(); k++) {
+                    // 在一行内循环
+                    Cell first = row.createCell(0);
+                    first.setCellValue(time);
+
+                    Cell second = row.createCell(1);
+                    second.setCellValue(city);
+
+                    Cell third = row.createCell(2);
+                    third.setCellValue(title);
+
+                    Cell four = row.createCell(3);
+                    four.setCellValue(answer);
+
+                    Cell fifth = row.createCell(4);
+                    fifth.setCellValue(total_amount);
+
+                    Cell six = row.createCell(5);
+                    six.setCellValue("");
+
+                    Cell seven = row.createCell(6);
+                    seven.setCellValue(cost);
+                }
+            }
+            // 创建文件输出流，准备输出电子表格：这个必须有，否则你在sheet上做的任何操作都不会有效
+            out = new FileOutputStream(finalXlsxPath);
+            workBook.write(out);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null) {
+                    out.flush();
+                    out.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+//        System.out.println("数据导出成功");
+    }
+
     public void writeExcelSheet2(String type, List<String> dataList, String finalXlsxPath) {
         OutputStream out = null;
         try {

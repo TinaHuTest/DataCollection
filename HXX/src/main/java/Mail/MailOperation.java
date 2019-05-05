@@ -39,8 +39,9 @@ public class MailOperation {
                 MimeMessage message = new MimeMessage(session);
                 message.setFrom(new InternetAddress(from));
                 if (!to.trim().equals(""))
-                    message.addRecipient(Message.RecipientType.TO,
-                            new InternetAddress(to.trim()));
+//                    message.addRecipient(Message.RecipientType.TO,
+//                            new InternetAddress(to.trim()));
+                    message.addRecipients(Message.RecipientType.TO,to);
                 message.setSubject(subject);
 
                 MimeBodyPart mbp1 = new MimeBodyPart(); // 正文
